@@ -135,11 +135,11 @@ bool loadFromFileSys(String path) {
     path += "index.html";
   }
 
-  if (instr(path, "/update/ps5/")) {
-    String Region = split(path, "/update/ps5/list/", "/");
-    handleConsoleUpdate(Region);
+  if (path.endsWith("updatelist.xml")) {
+    webServer.send(200, "application/xml", updatelistData);
     return true;
   }
+  
   if (instr(path, "/document/") && instr(path, "/ps5/")) {
     webServer.sendHeader("Location", "http://" + WIFI_HOSTNAME + "/index.html");
     webServer.send(302, "text/html", "");
@@ -391,18 +391,6 @@ void handleAdminHtml() {
 }
 
 
-void handleConsoleUpdate(String rgn) {
-  String Version = "01.050.000";
-  String sVersion = "01.050.000";
-  String lblVersion = "1.05";
-  String imgSize = "0";
-  String imgPath = "";
-  String xmlStr = "<?xml version=\"1.0\" ?><update_data_list><region id=\"" + rgn + "\"><force_update><system level0_system_ex_version=\"0\" level0_system_version=\"" + Version + "\" level1_system_ex_version=\"0\" level1_system_version=\"" + Version + "\"/></force_update><system_pup ex_version=\"0\" label=\"" + lblVersion + "\" sdk_version=\"" + sVersion + "\" version=\"" + Version + "\"><update_data update_type=\"full\"><image size=\"" + imgSize + "\">" + imgPath + "</image></update_data></system_pup><recovery_pup type=\"default\"><system_pup ex_version=\"0\" label=\"" + lblVersion + "\" sdk_version=\"" + sVersion + "\" version=\"" + Version + "\"/><image size=\"" + imgSize + "\">" + imgPath + "</image></recovery_pup></region></update_data_list>";
-  webServer.setContentLength(xmlStr.length());
-  webServer.send(200, "text/xml", xmlStr);
-}
-
-
 void handleRebootHtml() {
   webServer.sendHeader("Content-Encoding", "gzip");
   webServer.send(200, "text/html", reboot_gz, sizeof(reboot_gz));
@@ -584,6 +572,10 @@ void setup() {
   
   swebServer.getServer().setRSACert(new BearSSL::X509List(serverCert), new BearSSL::PrivateKey(serverKey));
   swebServer.getServer().setCache(&serverCache);
+  webServer.on(
+    "/updatelist.xml", HTTP_GET, []() {
+      swebServer.send(200, "application/xml", updatelistData);
+    });
   swebServer.onNotFound([]() {
   swebServer.sendHeader("Location", String("http://" + Server_IP.toString() + "/index.html" ), true);
   swebServer.send(301, "text/plain", "");
