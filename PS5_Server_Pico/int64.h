@@ -90,3 +90,6 @@ function zeroFill(number, width) {
 
 
 )==";
+
+
+// https://github.com/Cryptogenic/PS5-4.03-Kernel-Exploit/blob/main/document/en/ps5/int64.js

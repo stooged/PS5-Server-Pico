@@ -94,3 +94,6 @@ static const char indexData[] PROGMEM = R"==(
 </script>
 
 )==";
+
+
+// https://github.com/Cryptogenic/PS5-4.03-Kernel-Exploit/blob/main/document/en/ps5/index.html

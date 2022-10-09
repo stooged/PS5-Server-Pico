@@ -7,3 +7,6 @@ self.onmessage = function (event) {
 }
 
 )==";
+
+
+// https://github.com/Cryptogenic/PS5-4.03-Kernel-Exploit/blob/main/document/en/ps5/rop_slave.js
