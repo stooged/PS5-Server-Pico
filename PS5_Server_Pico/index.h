@@ -3,7 +3,7 @@ static const char indexData[] PROGMEM = R"==(
 <html>
 
 <head>
-    <title>PS5 Kernel Exploit (4.xx)</title>
+    <title>PS5 Kernel Exploit (3.xx-4.xx)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         .loader {
@@ -65,10 +65,9 @@ static const char indexData[] PROGMEM = R"==(
             document.getElementById("loader").style.display = "none";
         }
     </script>
-    <script src="int64.js"></script>
-    <script src="rop.js"></script>
-    <script src="exploit.js"></script>
-    <script src="webkit.js"></script>
+    <script defer src="int64.js"></script>
+    <script defer src="rop.js"></script>
+    <script defer src="exploit.js"></script>
 </head>
 
 </html>
@@ -81,7 +80,7 @@ static const char indexData[] PROGMEM = R"==(
 
     <center>
         <h3>
-            <b>v1.01.</b>
+            <b>v1.02.</b>
             <br />
             <a href="https://twitter.com/theflow0">@theflow0</a>, 
             <a href="https://twitter.com/SpecterDev">@SpecterDev</a>, 
@@ -106,4 +105,4 @@ static const char indexData[] PROGMEM = R"==(
 )==";
 
 
-// https://github.com/Cryptogenic/PS5-4.03-Kernel-Exploit/blob/main/document/en/ps5/index.html
+// https://github.com/ChendoChap/PS5-IPV6-Kernel-Exploit/blob/wip_branch/document/en/ps5/index.html
