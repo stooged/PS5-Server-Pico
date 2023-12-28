@@ -4,21 +4,10 @@
 #include <WebServerSecure.h>
 #include <LittleFS.h>
 #include <LEAmDNS.h>
-#include "index.h"
+#include "etahen.h"
+#include "offsets.h"
 #include "exploit.h"
-#include "int64.h"
-#include "rop.h"
-#include "rop_slave.h"
-#include "webkit.h"
-#include "offsets/3.00.h"
-#include "offsets/3.10.h"
-#include "offsets/3.20.h"
-#include "offsets/3.21.h"
-#include "offsets/4.00.h"
-#include "offsets/4.02.h"
-#include "offsets/4.03.h"
-#include "offsets/4.50.h"
-#include "offsets/4.51.h"
+
 
 
 static const char serverCert[] = "-----BEGIN CERTIFICATE-----\r\nMIIC1DCCAj2gAwIBAgIUFQgjEtkNYfmrrpNQKHVNl3+dl08wDQYJKoZIhvcNAQEL\r\nBQAwfDELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExEDAOBgNVBAcM\r\nB0ZyZW1vbnQxDDAKBgNVBAoMA2VzcDEMMAoGA1UECwwDZXNwMQwwCgYDVQQDDANl\r\nc3AxHDAaBgkqhkiG9w0BCQEWDWVzcEBlc3AubG9jYWwwHhcNMjEwMjIxMDAwMDQ4\r\nWhcNNDMwNzI4MDAwMDQ4WjB8MQswCQYDVQQGEwJVUzETMBEGA1UECAwKQ2FsaWZv\r\ncm5pYTEQMA4GA1UEBwwHRnJlbW9udDEMMAoGA1UECgwDZXNwMQwwCgYDVQQLDANl\r\nc3AxDDAKBgNVBAMMA2VzcDEcMBoGCSqGSIb3DQEJARYNZXNwQGVzcC5sb2NhbDCB\r\nnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAsrfFqlV5H0ajdAkkZ51HTOseOjYj\r\nNiaUD4MA5mIRonnph6EKIWb9Yl85vVa6yfVkGn3TFebQ96MMdTfZgLuP4ryCwe6Y\r\n+tZs2g6TjGbR0O6yuA8wQ2Ln7E0T05C8oOl88SGNV4tVL6hz64oMzuVebVDo0J9I\r\nybvL0O/LhMvC4x8CAwEAAaNTMFEwHQYDVR0OBBYEFCMQIU+pZQDVySXejfbIYbLQ\r\ncLXiMB8GA1UdIwQYMBaAFCMQIU+pZQDVySXejfbIYbLQcLXiMA8GA1UdEwEB/wQF\r\nMAMBAf8wDQYJKoZIhvcNAQELBQADgYEAFHPz3YhhXQYiERTGzt8r0LhNWdggr7t0\r\nWEVuAoEukjzv+3DVB2O+56NtDa++566gTXBGGar0pWfCwfWCEu5K6MBkBdm6Ub/A\r\nXDy+sRQTqH/jTFFh5lgxeq246kHWHGRad8664V5PoIh+OSa0G3CEB+BXy7WF82Qq\r\nqx0X6E/mDUU=\r\n-----END CERTIFICATE-----";
@@ -97,6 +86,7 @@ String formatBytes(size_t bytes) {
 }
 
 
+
 String urlencode(String str) {
   String encodedString = "";
   char c;
@@ -163,86 +153,147 @@ bool loadFromFileSys(String path) {
   dataFile = FILESYS.open(path, "r");
   
   if (!dataFile) {
+    
     if (path.endsWith("style.css")) {
       webServer.sendHeader("Content-Encoding", "gzip");
       webServer.send(200, "text/css", style_gz, sizeof(style_gz));
       return true;
     }
 
-    if (path.endsWith("index.html")) {
-      webServer.send(200, dataType.c_str(), indexData);
-      return true;
-    }
+  if (path.endsWith("index.html"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), index_gz, sizeof(index_gz));
+    return true;
+  }
 
-    if (path.endsWith("exploit.js")) {
-      webServer.send(200, dataType.c_str(), exploitData);
-      return true;
-    }
 
-    if (path.endsWith("int64.js")) {
-      webServer.send(200, dataType.c_str(), int64Data);
-      return true;
-    }
+  if (path.endsWith("3.00.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), o3_00_gz, sizeof(o3_00_gz));
+    return true;
+  }
 
-    if (path.endsWith("rop.js")) {
-      webServer.send(200, dataType.c_str(), ropData);
-      return true;
-    }
+  if (path.endsWith("3.10.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), o3_10_gz, sizeof(o3_10_gz));
+    return true;
+  }
 
-    if (path.endsWith("rop_slave.js")) {
-      webServer.send(200, dataType.c_str(), rop_slaveData);
-      return true;
-    }
+  if (path.endsWith("3.20.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), o3_20_gz, sizeof(o3_20_gz));
+    return true;
+  }
 
-    if (path.endsWith("webkit.js")) {
-      webServer.send(200, dataType.c_str(), webkitData);
-      return true;
-    }
+  if (path.endsWith("3.21.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), o3_21_gz, sizeof(o3_21_gz));
+    return true;
+  }
 
-    if (path.endsWith("3.00.js")) {
-      webServer.send(200, dataType.c_str(), x300Data);
-      return true;
-    }
+  if (path.endsWith("4.00.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), o4_00_gz, sizeof(o4_00_gz));
+    return true;
+  }
 
-    if (path.endsWith("3.10.js")) {
-      webServer.send(200, dataType.c_str(), x310Data);
-      return true;
-    }
+  if (path.endsWith("4.02.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), o4_02_gz, sizeof(o4_02_gz));
+    return true;
+  }
 
-    if (path.endsWith("3.20.js")) {
-      webServer.send(200, dataType.c_str(), x320Data);
-      return true;
-    }
+  if (path.endsWith("4.03.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), o4_03_gz, sizeof(o4_03_gz));
+    return true;
+  }
 
-    if (path.endsWith("3.21.js")) {
-      webServer.send(200, dataType.c_str(), x321Data);
-      return true;
-    }
+  if (path.endsWith("4.50.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), o4_50_gz, sizeof(o4_50_gz));
+    return true;
+  }
 
-    if (path.endsWith("4.00.js")) {
-      webServer.send(200, dataType.c_str(), x400Data);
-      return true;
-    }
+  if (path.endsWith("4.51.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), o4_51_gz, sizeof(o4_51_gz));
+    return true;
+  }
 
-    if (path.endsWith("4.02.js")) {
-      webServer.send(200, dataType.c_str(), x402Data);
-      return true;
-    }
 
-    if (path.endsWith("4.03.js")) {
-      webServer.send(200, dataType.c_str(), x403Data);
-      return true;
-    }
+  if (path.endsWith("custom_host_stuff.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), custom_host_stuff_gz, sizeof(custom_host_stuff_gz));
+    return true;
+  }
 
-    if (path.endsWith("4.50.js")) {
-      webServer.send(200, dataType.c_str(), x450Data);
-      return true;
-    }
+  if (path.endsWith("exploit.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), exploit_gz, sizeof(exploit_gz));
+    return true;
+  }
 
-    if (path.endsWith("4.51.js")) {
-      webServer.send(200, dataType.c_str(), x451Data);
-      return true;
-    }
+  if (path.endsWith("int64.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), int64_gz, sizeof(int64_gz));
+    return true;
+  }
+
+  if (path.endsWith("main.css"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, "text/css", main_gz, sizeof(main_gz));
+    return true;
+  }
+
+  if (path.endsWith("rop.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), rop_gz, sizeof(rop_gz));
+    return true;
+  }
+
+  if (path.endsWith("rop_slave.js"))
+  {    
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), rop_slave_gz, sizeof(rop_slave_gz));
+    return true;
+  }
+
+  if (path.endsWith("webkit.js"))
+  {   
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), webkit_gz, sizeof(webkit_gz));
+    return true;
+  }
+
+  if (path.endsWith("payload_map.js"))
+  {
+    handlePayloads();
+    return true;
+  }
+
+
+  if (path.endsWith("ethen.bin"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), etahen, sizeof(etahen));
+    return true;
+  }
 
     
     return false;
@@ -480,26 +531,45 @@ void handleInfo() {
 
 
 
-void handleElfload(String fileName)
+void handlePayloads()
 {
-  WiFiClient client;
-  if (!client.connect(webServer.client().remoteIP(), 9020)) {
-    delay(1000);
-    webServer.send(500, "text/plain", "Internal Server Error");
-  }
-  else
+  String output = "const payload_map =\r\n[";
+  output += "{\r\n";
+  output += "displayTitle: 'etaHEN',\r\n"; //internal etahen bin
+  output += "description: 'Runs With 3.xx and 4.xx. FPKG enabler For FW 4.03-4.51 Only.',\r\n";  
+  output += "fileName: 'ethen.bin',\r\n";
+  output += "author: 'LightningMods_, sleirsgoevy, ChendoChap, astrelsky, illusion',\r\n";
+  output += "source: 'https://github.com/LightningMods/etaHEN',\r\n";
+  output += "version: '1.2 beta'\r\n}\r\n";
+  
+  Dir dir = FILESYS.openDir("/");
+  while(dir.next())
   {
-     delay(1000);
-     File dataFile = FILESYS.open(fileName, "r");
-     if (dataFile) {
-       while (dataFile.available()) {
-         client.write(dataFile.read());
-       }
-    dataFile.close(); 
+    File file = dir.openFile("r");
+    String fname = String(file.name());
+    fname.replace("/", "");
+    if (fname.endsWith(".gz"))
+    {
+      fname = fname.substring(0, fname.length() - 3);
+    }
+    if (fname.length() > 0 && !file.isDirectory() && fname.endsWith(".bin") || fname.endsWith(".elf"))
+    {
+      String fnamev = fname;
+      fnamev.replace(".bin", "");
+      fnamev.replace(".elf", "");
+      output += ",{\r\n";
+      output += "displayTitle: '" + fnamev + "',\r\n";
+      output += "description: '" + fname + "',\r\n";  
+      output += "fileName: '" + fname + "',\r\n";
+      output += "author: '',\r\n";
+      output += "source: '',\r\n";
+      output += "version: '1'\r\n}\r\n";
+    }
+    file.close();
   }
-  client.stop();
-  webServer.send(200, "text/plain", "OK");
-  }
+  output += "\r\n];";
+  webServer.setContentLength(output.length());
+  webServer.send(200, "application/javascript", output);
 }
 
 
