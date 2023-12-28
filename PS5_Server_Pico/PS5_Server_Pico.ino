@@ -123,6 +123,8 @@ String urlencode(String str) {
 
 bool loadFromFileSys(String path) {
   path = webServer.urlDecode(path);
+  String dataType = mime::getContentType(path);
+  
   if (path.equals("/connecttest.txt")) {
     webServer.setContentLength(22);
     webServer.send(200, "text/plain", "Microsoft Connect Test");
@@ -146,19 +148,6 @@ bool loadFromFileSys(String path) {
     return true;
   }
 
-  String dataType = mime::getContentType(path);
-
-  File dataFile;
-  
-  dataFile = FILESYS.open(path, "r");
-  
-  if (!dataFile) {
-    
-    if (path.endsWith("style.css")) {
-      webServer.sendHeader("Content-Encoding", "gzip");
-      webServer.send(200, "text/css", style_gz, sizeof(style_gz));
-      return true;
-    }
 
   if (path.endsWith("index.html"))
   {
@@ -295,7 +284,15 @@ bool loadFromFileSys(String path) {
     return true;
   }
 
-    
+
+  File dataFile;
+  dataFile = FILESYS.open(path, "r");
+  if (!dataFile) {
+    if (path.endsWith("style.css")) {
+      webServer.sendHeader("Content-Encoding", "gzip");
+      webServer.send(200, "text/css", style_gz, sizeof(style_gz));
+      return true;
+    }
     return false;
   }
   if (webServer.hasArg("download")) {
