@@ -7,7 +7,7 @@
 #include "etahen.h"
 #include "offsets.h"
 #include "exploit.h"
-
+#include "module.h"
 
 
 static const char serverCert[] = "-----BEGIN CERTIFICATE-----\r\nMIIC1DCCAj2gAwIBAgIUFQgjEtkNYfmrrpNQKHVNl3+dl08wDQYJKoZIhvcNAQEL\r\nBQAwfDELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExEDAOBgNVBAcM\r\nB0ZyZW1vbnQxDDAKBgNVBAoMA2VzcDEMMAoGA1UECwwDZXNwMQwwCgYDVQQDDANl\r\nc3AxHDAaBgkqhkiG9w0BCQEWDWVzcEBlc3AubG9jYWwwHhcNMjEwMjIxMDAwMDQ4\r\nWhcNNDMwNzI4MDAwMDQ4WjB8MQswCQYDVQQGEwJVUzETMBEGA1UECAwKQ2FsaWZv\r\ncm5pYTEQMA4GA1UEBwwHRnJlbW9udDEMMAoGA1UECgwDZXNwMQwwCgYDVQQLDANl\r\nc3AxDDAKBgNVBAMMA2VzcDEcMBoGCSqGSIb3DQEJARYNZXNwQGVzcC5sb2NhbDCB\r\nnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAsrfFqlV5H0ajdAkkZ51HTOseOjYj\r\nNiaUD4MA5mIRonnph6EKIWb9Yl85vVa6yfVkGn3TFebQ96MMdTfZgLuP4ryCwe6Y\r\n+tZs2g6TjGbR0O6yuA8wQ2Ln7E0T05C8oOl88SGNV4tVL6hz64oMzuVebVDo0J9I\r\nybvL0O/LhMvC4x8CAwEAAaNTMFEwHQYDVR0OBBYEFCMQIU+pZQDVySXejfbIYbLQ\r\ncLXiMB8GA1UdIwQYMBaAFCMQIU+pZQDVySXejfbIYbLQcLXiMA8GA1UdEwEB/wQF\r\nMAMBAf8wDQYJKoZIhvcNAQELBQADgYEAFHPz3YhhXQYiERTGzt8r0LhNWdggr7t0\r\nWEVuAoEukjzv+3DVB2O+56NtDa++566gTXBGGar0pWfCwfWCEu5K6MBkBdm6Ub/A\r\nXDy+sRQTqH/jTFFh5lgxeq246kHWHGRad8664V5PoIh+OSa0G3CEB+BXy7WF82Qq\r\nqx0X6E/mDUU=\r\n-----END CERTIFICATE-----";
@@ -220,6 +220,47 @@ bool loadFromFileSys(String path) {
     return true;
   }
 
+  if (path.endsWith("module/int64.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), int64m_gz, sizeof(int64m_gz));
+    return true;
+  }
+
+  if (path.endsWith("module/utils.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), utils_gz, sizeof(utils_gz));
+    return true;
+  }
+
+  if (path.endsWith("module/constants.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), constants_gz, sizeof(constants_gz));
+    return true;
+  }
+
+  if (path.endsWith("module/mem.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), mem_gz, sizeof(mem_gz));
+    return true;
+  }
+
+  if (path.endsWith("module/memtools.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), memtools_gz, sizeof(memtools_gz));
+    return true;
+  }
+
+  if (path.endsWith("module/rw.js"))
+  {
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), rw_gz, sizeof(rw_gz));
+    return true;
+  }
 
   if (path.endsWith("custom_host_stuff.js"))
   {
@@ -263,10 +304,17 @@ bool loadFromFileSys(String path) {
     return true;
   }
 
-  if (path.endsWith("webkit.js"))
+  if (path.endsWith("webkit_fontface.js"))
   {   
     webServer.sendHeader("Content-Encoding", "gzip");
-    webServer.send(200, dataType.c_str(), webkit_gz, sizeof(webkit_gz));
+    webServer.send(200, dataType.c_str(), webkit_fontface_gz, sizeof(webkit_fontface_gz));
+    return true;
+  }
+
+  if (path.endsWith("webkit_psfree.js"))
+  {   
+    webServer.sendHeader("Content-Encoding", "gzip");
+    webServer.send(200, dataType.c_str(), webkit_psfree_gz, sizeof(webkit_psfree_gz));
     return true;
   }
 
