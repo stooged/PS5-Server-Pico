@@ -35,7 +35,11 @@ Tom's Hardware presented a very nice writeup on installing arduino-pico on both 
 
 ## Uploading to board
 
-installation is simple you just use the arduino ide to flash the sketch/firmware to the pico board.<br>
+installation is simple you just use the arduino ide to flash the sketch/firmware to the pico board with the following board settings.<br>
+
+
+<img src=https://github.com/stooged/PS5-Server-Pico/blob/main/images/board.jpg><br>
+
 
 or <br>
 
