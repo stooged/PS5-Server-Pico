@@ -23,11 +23,10 @@ boolean hasStarted = false;
 File upFile;
 String firmwareVer = "1.00";
 
-
 //-------------------DEFAULT SETTINGS------------------//
 
-// use config.ini [ true / false ]
-#define USECONFIG true  // this will allow you to change these settings below via the admin webpage. \
+                        // use config.ini [ true / false ]
+#define USECONFIG true  // this will allow you to change these settings below via the admin webpage.
                         // if you want to permanently use the values below then set this to false.
 
 // access point
@@ -133,9 +132,6 @@ bool loadFromFileSys(String path) {
   if (path.equals("/config.ini")) {
     return false;
   }
-  if (path.endsWith("/")) {
-    path += "index.html";
-  }
 
   if (path.endsWith("updatelist.xml")) {
     webServer.send(200, "application/xml", updatelistData);
@@ -149,10 +145,10 @@ bool loadFromFileSys(String path) {
   }
 
 
-  if (path.endsWith("index.html"))
+  if (path.endsWith("index.html") || path.endsWith("index.htm") || path.endsWith("/"))
   {
     webServer.sendHeader("Content-Encoding", "gzip");
-    webServer.send(200, dataType.c_str(), index_gz, sizeof(index_gz));
+    webServer.send(200, "text/html", index_gz, sizeof(index_gz));
     return true;
   }
 
@@ -324,14 +320,12 @@ bool loadFromFileSys(String path) {
     return true;
   }
 
-
   if (path.endsWith("ethen.bin"))
   {
     webServer.sendHeader("Content-Encoding", "gzip");
-    webServer.send(200, dataType.c_str(), etahen, sizeof(etahen));
+    webServer.send(200, dataType.c_str(), etahen_gz, sizeof(etahen_gz));
     return true;
   }
-
 
   File dataFile;
   dataFile = FILESYS.open(path, "r");
@@ -585,7 +579,7 @@ void handlePayloads()
   output += "fileName: 'ethen.bin',\r\n";
   output += "author: 'LightningMods_, sleirsgoevy, ChendoChap, astrelsky, illusion',\r\n";
   output += "source: 'https://github.com/LightningMods/etaHEN',\r\n";
-  output += "version: 'v1.3 beta'\r\n}\r\n";
+  output += "version: 'v1.6 beta'\r\n}\r\n";
   
   Dir dir = FILESYS.openDir("/");
   while(dir.next())
@@ -741,9 +735,7 @@ void loadSTA() {
 
 
 void setup() {
-
   startFileSystem();
-
   webServer.onNotFound(handleNotFound);
   webServer.on(
     "/upload.html", HTTP_POST, []() {
