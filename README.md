@@ -41,9 +41,9 @@ installation is simple you just use the arduino ide to flash the sketch/firmware
 <img src=https://github.com/stooged/PS5-Server-Pico/blob/main/images/board.jpg><br>
 
 
-or <br>
+<br>
 
-you can download the <a href=https://github.com/stooged/PS5-Server-Pico/releases>PS5_Server_Pico.uf2</a> file then connect your pico to your pc and drop the file into the storage drive the pico creates, the board will update and reboot.<br>
+alternatively you can download the <a href=https://github.com/stooged/PS5-Server-Pico/releases>PS5_Server_Pico.uf2</a> file then connect your pico to your pc and drop the file into the storage drive the pico creates, the board will update and reboot.<br>
 
 
 
